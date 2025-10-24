@@ -10,14 +10,14 @@ on:
 jobs:
   ios:
     name: iOS (unsigned) build
-    runs-on: macos-14    # Xcode 15.x; use macos-15 for Xcode 16
+    runs-on: macos-14  # Xcode 15.x; use macos-15 for Xcode 16
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.7'   # gives Dart 3.9.x
+          flutter-version: '3.35.7'   # Dart 3.9.x
           channel: 'stable'
           architecture: arm64         # GitHub macOS-14 runners are Apple Silicon
           cache: true
@@ -31,11 +31,9 @@ jobs:
       - name: Tests
         run: flutter test
 
-      # Build an iOS app WITHOUT code signing (good for CI sanity checks)
       - name: Build iOS (no codesign)
         run: flutter build ios --release --no-codesign
 
-      # Zip the built .app so you can download it from Actions
       - name: Zip Runner.app
         run: |
           cd build/ios/iphoneos
@@ -56,8 +54,9 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.35.7'   # Dart 3.9.x
           channel: 'stable'
-          flutter-version: 'stable'
+          architecture: x64           # Ubuntu uses x64 architecture
           cache: true
 
       - name: Flutter pub get
@@ -77,4 +76,3 @@ jobs:
         with:
           name: android-aab
           path: build/app/outputs/bundle/release/*.aab
-
